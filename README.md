@@ -1,25 +1,15 @@
 # Rave Signal
 
-A small, static EDM news and releases radar. The site reads `data/latest.json`; GitHub Actions refreshes that feed every 30 minutes from the configured RSS sources and commits changed snapshots to Git.
+An EDM news and releases radar with the annual DJ Mag Top 100 DJs archive. News reads `data/latest.json`; GitHub Actions refreshes it every 30 minutes. A separate workflow collects year-by-year rankings and portrait image links from DJ Mag, from 1995 onward.
 
 ## Local preview
 
-Open `index.html` in a browser. To fetch current stories locally, run:
+Serve this folder with any static web server (for example `python -m http.server 8000`) and open `http://localhost:8000`. Run `python scripts/update_feed.py` for fresh news or `python scripts/update_top100.py` to refresh the ranking archive.
 
-```powershell
-python scripts/update_feed.py
-```
+## GitHub
 
-Then serve the project folder with any static web server (for example `python -m http.server 8000`) and open `http://localhost:8000`.
-
-## GitHub setup
-
-1. Push this repository to GitHub.
-2. Enable Actions for the repository. Run **Update EDM feed** once from the Actions tab for an immediate first scan; scheduled runs continue every 30 minutes.
-3. In **Settings → Pages**, choose **Deploy from a branch**, then select `main` (or `master`) and `/ (root)`.
-
-The workflow stores each changed feed snapshot in Git history. GitHub Pages serves the site. RSS content is summarized for display and linked to its original publisher.
+The Pages site is published from `main` and available at https://capmoonxd-afk.github.io/Moonbreak7/. News updates are committed automatically every 30 minutes. The DJ ranking archive is refreshed annually and can be started manually from the Actions tab.
 
 ## Sources
 
-The starter configuration uses the EDM.com RSS feed at `https://edm.com/blog/feed/`. Add more feeds to `data/sources.json`.
+News feed: https://edm.com/blog/feed/ · DJ Mag Top 100 archive: https://djmag.com/top100djs

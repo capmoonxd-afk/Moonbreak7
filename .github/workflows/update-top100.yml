@@ -1,0 +1,33 @@
+name: Update Top 100 DJs archive
+on:
+  schedule:
+    - cron: '0 2 8 10 *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/update_top100.py'
+      - '.github/workflows/update-top100.yml'
+permissions:
+  contents: write
+concurrency:
+  group: top100-archive-update
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Fetch yearly rankings and artist portraits
+        run: python scripts/update_top100.py
+      - name: Commit archive snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/top100.json
+          git diff --cached --quiet || git commit -m "Refresh DJ Mag Top 100 archive"
+          git push
+
