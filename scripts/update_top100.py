@@ -23,7 +23,7 @@ class PollImages(HTMLParser):
             return
         attrs = dict(attrs)
         alt = (attrs.get("alt") or "").strip()
-        match = re.match(r"Poll\s+(\d{4})\s*:\s*(.+)", alt, re.I)
+        match = re.search(r"Poll\s+(\d{4})\s*:\s*(.+)$", alt, re.I)
         if not match or match.group(1) != self.year:
             return
         name = re.sub(r"\s+", " ", match.group(2)).strip()
@@ -59,3 +59,4 @@ output = {"updated_at": datetime.now(timezone.utc).isoformat(timespec="minutes")
 target = ROOT / "data" / "top100.json"
 target.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(f"Saved {len(years)} yearly rankings to {target}")
+
